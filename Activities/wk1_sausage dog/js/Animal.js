@@ -20,6 +20,9 @@ class Animal {
     pop();
   }
 
+  // Check if the x is greater than the left side and less that the right side
+  // and greater than the top and less than the bottom of the image
+  // Uses the width and height properties of the image to track its size
   overlap(x, y) {
     if (
       mouseX > this.x - this.image.width / 2 &&

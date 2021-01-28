@@ -78,12 +78,10 @@ function draw() {
   background(255, 255, 0);
 
   updateAnimals();
-
   //makes sausageDog appear
   sausageDog.update();
 }
 
-// updateAnimals()
 // Calls the update() method for all animals
 function updateAnimals() {
   for (let i = 0; i < animals.length; i++) {
