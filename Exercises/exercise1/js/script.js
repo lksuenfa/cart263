@@ -23,6 +23,12 @@ let animals = [];
 //sausage dog image
 let sausageDogImage = undefined;
 let sausageDog = undefined;
+let sausageDogSound = undefined;
+
+let state = `title`; //can be title, simulation, end
+
+let button1;
+let button2;
 
 // Loads all the animal images and the sausage dog image
 function preload() {
@@ -35,10 +41,15 @@ function preload() {
 
   //load sausage dog image
   sausageDogImage = loadImage(`${SAUSAGE_DOG_IMAGE}`);
+  sausageDogSound = loadSound(`assets/sounds/dogSound.mp3`);
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+
+  // Tell p5.sound to work on starting the audio for this page as soon as
+  // the user interacts with it
+  userStartAudio();
 
   createAnimals();
   createSausageDog();
@@ -61,7 +72,8 @@ function createRandomAnimal() {
   let x = random(0, width);
   let y = random(0, height);
   let animalImage = random(animalImages);
-  let animal = new Animal(x, y, animalImage);
+  let angle = random(0, 360);
+  let animal = new Animal(x, y, animalImage, angle);
   return animal;
 }
 
@@ -71,12 +83,67 @@ function createSausageDog() {
   //create sausage dog
   let x = random(0, width);
   let y = random(0, height);
-  sausageDog = new SausageDog(x, y, sausageDogImage);
+  let angle = random(0, 360);
+  sausageDog = new SausageDog(x, y, sausageDogImage, angle, sausageDogSound);
 }
 
 function draw() {
   background(255, 255, 0);
 
+  //display screens
+  switch (state) {
+    case `title`:
+      title();
+      break;
+
+    case `simulation`:
+      simulation();
+      break;
+  }
+}
+
+//display starting message
+function title() {
+  push();
+  textSize(66);
+  fill(0);
+  textAlign(CENTER, CENTER);
+  text(`Find Pogo`, width / 2, height / 2);
+  pop();
+
+  //make button to choose mode
+  button1 = createButton("Regular Mode");
+  button1.position(width / 2, height / 2 + 50);
+  button1.mousePressed(canvasEasy);
+
+  button2 = createButton("Difficult Mode");
+  button2.position(width / 2, height / 2 + 100);
+  button2.mousePressed(canvasMedium);
+}
+
+//regular canvas
+function canvasEasy() {
+  createCanvas(windowWidth, windowHeight);
+}
+
+//change canvas size if clicked
+function canvasMedium() {
+  createCanvas(windowWidth - 200, windowHeight - 200);
+}
+
+//display starting message
+function end() {
+  push();
+  textSize(66);
+  fill(0);
+  textAlign(CENTER, CENTER);
+  text(`Pogo was found!`, width / 2, height / 2);
+
+  pop();
+}
+//game SIMULATION
+function simulation() {
+  // make animals appear
   updateAnimals();
   //makes sausageDog appear
   sausageDog.update();
@@ -90,5 +157,18 @@ function updateAnimals() {
 }
 
 function mousePressed() {
-  sausageDog.mousePressed();
+  //start simulation after click
+  if (state == `title`) {
+    state = `simulation`;
+  }
+
+  //does not work
+  //makes animals move if clicked
+  // animals.mousePressed();
+
+  //clicking on dog does not work = no sound = error message
+  //if dog is clicked, start sound
+  if (sausageDog.mousePressed()) {
+    sausageDogSound.play();
+  }
 }

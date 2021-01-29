@@ -1,10 +1,12 @@
 class Animal {
-  constructor(x, y, image) {
+  constructor(x, y, image, angle) {
     this.x = x;
     this.y = y;
     this.image = image;
 
-    this.angle = 0;
+    this.move = 5;
+
+    this.angle = angle;
   }
 
   update() {
@@ -33,6 +35,12 @@ class Animal {
       return true;
     } else {
       return false;
+    }
+  }
+
+  mousePressed() {
+    if (this.overlap(mouseX, mouseY)) {
+      this.x += this.move;
     }
   }
 }
