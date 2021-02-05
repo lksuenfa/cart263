@@ -5,8 +5,10 @@ CART 263 - Activity 2
 Guess the drug
 Leanne Suen Fa
 
+guess the drug name from the reverse pronounciation
 **************************************************/
 
+//from https://github.com/dariusk/corpora/blob/master/data/medicine/drugs.json
 const DRUGS = [
   "Abacavir Sulfate",
   "Abatacept",
@@ -1010,8 +1012,8 @@ const DRUGS = [
   "Zymaxid",
 ];
 
-let currentDrug = ``;
-let currentAnswer = ``;
+let currentDrug = ``; //current drug to be guessed
+let currentAnswer = ``; //answer to display
 
 //title screens
 let state = `title`; //can be title, simulation, end
@@ -1020,13 +1022,21 @@ let state = `title`; //can be title, simulation, end
 let score = 0;
 const MAXSCORE = 5;
 
+/**
+Create a canvas
+Set up annyang with the guessing command
+Set text defaults
+*/
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
+  // Is annyang available?
   if (annyang) {
+    // Create the guessing command
     let commands = {
       "I think it is *drug": guessDrug,
     };
+    // Setup annyang and start
     annyang.addCommands(commands);
     annyang.start();
 
@@ -1036,6 +1046,8 @@ function setup() {
     textAlign(CENTER, CENTER);
   }
 }
+
+//display
 
 function draw() {
   //switch screens
@@ -1067,15 +1079,19 @@ function title() {
 
 function simulation() {
   background(0);
+  //display text
+  text(`I think it is : `, width / 2, height / 2 - 200);
 
-  text(`I think it is`, width / 2, height / 2 - 200);
+  //change colour of answer if it's correct or not
+  //if user names correct drug, text colour is green
   if (currentAnswer === currentDrug) {
     fill(0, 255, 0);
+
+    //otherwise, text colour is red
   } else {
     fill(255, 0, 0);
   }
   text(currentAnswer, width / 2, height / 2);
-
   text(score, width - 200, height - 100);
 }
 
@@ -1111,9 +1127,11 @@ function mousePressed() {
 }
 
 function guessDrug(drug) {
+  // Convert the guess to lowercase to match the answer format
   currentAnswer = drug.toLowerCase();
   console.log(currentAnswer);
 
+  //increase score if user guesses correct drug
   if (currentAnswer === currentDrug) {
     score = score + 1;
   }
