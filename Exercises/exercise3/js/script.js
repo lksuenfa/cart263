@@ -20,6 +20,12 @@ let tarotData = undefined;
 
 let resetButton = undefined;
 
+let state = `title`;
+
+let data;
+
+let passwordEntered = false;
+
 function preload() {
   tarotData = loadJSON(
     `https://raw.githubusercontent.com/dariusk/corpora/master/data/divination/tarot_interpretations.json`
@@ -37,35 +43,12 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
-  let data = JSON.parse(localStorage.getItem(`spy-profile-data`));
-
-  //welcome user when entering the page...does not work
-  responsiveVoice.speak("Welcome Agent", "Bangla India Male");
-
-  resetSpyProfile();
-  //if there is saved data
-  if (data !== null) {
-    let password = prompt(`Agent! What is your password?`);
-
-    //if password is correct, can see the rest of the profile
-    if (password === data.password) {
-      spyData(data);
-
-      //greets agent with responsivevoice
-      responsiveVoice.speak("Hello Agent!", "Bangla India Male");
-    }
-  } else {
-    generateSpyProfile();
-  }
+  data = JSON.parse(localStorage.getItem(`spy-profile-data`));
 }
 
 function resetSpyProfile() {
-  resetButton = createButton("Reset Profile");
-  resetButton.size(100, 50);
-  resetButton.position(500, 500);
-  resetButton.mousePressed(resetSpyProfile);
   localStorage.removeItem(`spy-profile-data`);
-  JSON.parse(localStorage.getItem(`spy-profile-data`));
+  generateSpyProfile();
 }
 /**
 Assigns across the profile properties from the data to the current profile
@@ -100,6 +83,59 @@ Displays the current spy profile.
 function draw() {
   background(15, 46, 27);
 
+  //display screens
+  switch (state) {
+    case `title`:
+      title();
+      break;
+
+    case `simulation`:
+      simulation();
+      break;
+  }
+
+  //does not work ...how to refresh page to reset profile
+  // if (data === null) {
+  //   generateSpyProfile();
+  // }
+}
+
+function title() {
+  push();
+  textFont(`Courier, monospace`);
+  fill(0, 255, 99);
+  textSize(36);
+  textAlign(CENTER, CENTER);
+
+  text(`Welcome to the Secret Agent portal`, width / 2, height / 2);
+  text(`Click to enter`, width / 2, height / 2 + 100);
+  pop();
+}
+
+function simulation() {
+  //reset resetButton
+  resetButton = createButton("Reset Profile");
+  resetButton.size(100, 50);
+  resetButton.position(width / 2, width / 2 - 100);
+  resetButton.mousePressed(resetSpyProfile);
+
+  // resetSpyProfile();
+  //if there is saved data
+  if (data !== null && passwordEntered === false) {
+    let password = prompt(`Agent! What is your password?`);
+
+    //if password is correct, can see the rest of the profile
+    if (password === data.password) {
+      spyData(data);
+      passwordEntered = true;
+    }
+  } else {
+    generateSpyProfile();
+  }
+
+  //welcome user when entering the page...does not work
+  responsiveVoice.speak("Welcome Agent", "Bangla India Male");
+
   let profile = `**SPY PROFILE! TOP SECRET**
 
   Name : ${spyProfile.name}
@@ -116,11 +152,10 @@ function draw() {
 
   text(profile, 100, 100);
   pop();
-
-  //does not work ...how to refresh page to reset profile
-  if (data === null) {
-    generateSpyProfile();
+}
+function mousePressed() {
+  //start simulation after click
+  if (state == `title`) {
+    state = `simulation`;
   }
 }
-
-function mousePressed() {}
