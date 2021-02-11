@@ -1,11 +1,11 @@
 "use strict";
 
 /**************************************************
-Activity 3  Spy Profile Generator
+Exercise 3  Spy Profile Generator++
 Leanne Suen Fa
 
-Generates a random spy profile for the user and password protects it
 **************************************************/
+
 // The spy profile data while the program is running
 let spyProfile = {
   name: `**REDACTED**`,
@@ -17,6 +17,8 @@ let spyProfile = {
 let instrumentData = undefined;
 let objectData = undefined;
 let tarotData = undefined;
+
+let resetButton = undefined;
 
 function preload() {
   tarotData = loadJSON(
@@ -37,6 +39,10 @@ function setup() {
 
   let data = JSON.parse(localStorage.getItem(`spy-profile-data`));
 
+  //welcome user when entering the page...does not work
+  responsiveVoice.speak("Welcome Agent", "Bangla India Male");
+
+  resetSpyProfile();
   //if there is saved data
   if (data !== null) {
     let password = prompt(`Agent! What is your password?`);
@@ -44,12 +50,23 @@ function setup() {
     //if password is correct, can see the rest of the profile
     if (password === data.password) {
       spyData(data);
+
+      //greets agent with responsivevoice
+      responsiveVoice.speak("Hello Agent!", "Bangla India Male");
     }
   } else {
     generateSpyProfile();
   }
 }
 
+function resetSpyProfile() {
+  resetButton = createButton("Reset Profile");
+  resetButton.size(100, 50);
+  resetButton.position(500, 500);
+  resetButton.mousePressed(resetSpyProfile);
+  localStorage.removeItem(`spy-profile-data`);
+  JSON.parse(localStorage.getItem(`spy-profile-data`));
+}
 /**
 Assigns across the profile properties from the data to the current profile
 */
@@ -99,4 +116,11 @@ function draw() {
 
   text(profile, 100, 100);
   pop();
+
+  //does not work ...how to refresh page to reset profile
+  if (data === null) {
+    generateSpyProfile();
+  }
 }
+
+function mousePressed() {}
