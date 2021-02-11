@@ -4,6 +4,7 @@
 Exercise 3  Spy Profile Generator++
 Leanne Suen Fa
 
+answer spy team leader question about your name and password and if not correct reset it 
 **************************************************/
 
 // The spy profile data while the program is running
@@ -92,6 +93,10 @@ function draw() {
     case `simulation`:
       simulation();
       break;
+
+    case `started`:
+      started();
+      break;
   }
 
   //does not work ...how to refresh page to reset profile
@@ -121,28 +126,34 @@ function simulation() {
 
   // resetSpyProfile();
   //if there is saved data
-  if (data !== null && passwordEntered === false) {
+  if (data !== null) {
     let password = prompt(`Agent! What is your password?`);
-
+    console.log(password, data.password);
     //if password is correct, can see the rest of the profile
     if (password === data.password) {
+      // console.log("password is correct");
       spyData(data);
-      passwordEntered = true;
+      state = `started`;
+    } else {
+      generateSpyProfile();
+      state = `started`;
     }
-  } else {
-    generateSpyProfile();
   }
 
   //welcome user when entering the page...does not work
-  responsiveVoice.speak("Welcome Agent", "Bangla India Male");
+  if (responsiveVoice.isPlaying() === false) {
+    responsiveVoice.speak("Welcome Agent", "Bangla India Male");
+  }
+}
 
+function started() {
   let profile = `**SPY PROFILE! TOP SECRET**
 
-  Name : ${spyProfile.name}
-  Alias : ${spyProfile.alias}
-  Secret Weapons : ${spyProfile.secretWeapon}
-  Password: ${spyProfile.password}
-  `;
+   Name : ${spyProfile.name}
+   Alias : ${spyProfile.alias}
+   Secret Weapons : ${spyProfile.secretWeapon}
+   Password: ${spyProfile.password}
+   `;
 
   push();
   textFont(`Courier, monospace`);
@@ -153,6 +164,8 @@ function simulation() {
   text(profile, 100, 100);
   pop();
 }
+
+function reset() {}
 function mousePressed() {
   //start simulation after click
   if (state == `title`) {
