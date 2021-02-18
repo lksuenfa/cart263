@@ -16,7 +16,9 @@ let handpose = undefined;
 let predictions = [];
 
 //bubble
-let bubble = undefined;
+// let bubble = undefined;
+const NUM_BUBBLES = 10;
+let bubbles = [];
 
 // setup()
 //
@@ -40,13 +42,20 @@ function setup() {
   });
 
   //bubble
-  bubble = {
-    x: random(width),
-    y: height,
-    size: 100,
-    vx: 0,
-    vy: -2,
-  };
+  // bubble = {
+  //   x: random(width),
+  //   y: height,
+  //   size: 100,
+  //   vx: 0,
+  //   vy: -2,
+  // };
+
+  for (let i = 0; i < NUM_BUBBLES; i++) {
+    let x = random(width);
+    let y = random(height, height + 200);
+    let bubble = new Bubble(x, y);
+    bubbles.push(bubble);
+  }
 }
 
 // draw()
@@ -83,27 +92,35 @@ function draw() {
     pop();
 
     //check bubble popping
-    let d = dist(tipX, tipY, bubble.x, bubble.y);
-
-    if (d < bubble.size / 2) {
-      bubble.x = random(width);
-      bubble.y = height;
+    // let d = dist(tipX, tipY, bubble.x, bubble.y);
+    //
+    // if (d < bubble.size / 2) {
+    //   bubble.x = random(width);
+    //   bubble.y = height;
+    // }
+    for (let i = 0; i < bubbles.length; i++) {
+      bubbles[i].checkPopping(tipX, tipY);
     }
   }
 
   //movement of bubble
-  bubble.x += bubble.vx;
-  bubble.y += bubble.vy;
+  // bubble.x += bubble.vx;
+  // bubble.y += bubble.vy;
+  //
+  // //reset bubble position
+  // if (bubble.y < 0) {
+  //   bubble.x = random(width);
+  //   bubble.y = height;
+  // }
 
-  //reset bubble position
-  if (bubble.y < 0) {
-    bubble.x = random(width);
-    bubble.y = height;
+  // push();
+  // fill(0, 100, 200);
+  // noStroke();
+  // ellipse(bubble.x, bubble.y, bubble.size);
+  // pop();
+
+  //display bubble and make it move
+  for (let i = 0; i < bubbles.length; i++) {
+    bubbles[i].update();
   }
-
-  push();
-  fill(0, 100, 200);
-  noStroke();
-  ellipse(bubble.x, bubble.y, bubble.size);
-  pop();
 }
