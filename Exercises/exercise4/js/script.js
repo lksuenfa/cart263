@@ -20,6 +20,9 @@ let predictions = [];
 const NUM_BUBBLES = 10;
 let bubbles = [];
 
+//score
+let score = 0;
+
 // setup()
 //
 // Description of setup() goes here.
@@ -41,15 +44,6 @@ function setup() {
     predictions = results;
   });
 
-  //bubble
-  // bubble = {
-  //   x: random(width),
-  //   y: height,
-  //   size: 100,
-  //   vx: 0,
-  //   vy: -2,
-  // };
-
   for (let i = 0; i < NUM_BUBBLES; i++) {
     let x = random(width);
     let y = random(height, height + 200);
@@ -59,8 +53,6 @@ function setup() {
 }
 
 // draw()
-//
-// Description of draw() goes here.
 function draw() {
   background(0);
 
@@ -87,40 +79,32 @@ function draw() {
     //draw pin head following index base
     push();
     noStroke();
+
     fill(255, 0, 0);
     ellipse(baseX, baseY, 20);
     pop();
 
     //check bubble popping
-    // let d = dist(tipX, tipY, bubble.x, bubble.y);
-    //
-    // if (d < bubble.size / 2) {
-    //   bubble.x = random(width);
-    //   bubble.y = height;
-    // }
     for (let i = 0; i < bubbles.length; i++) {
-      bubbles[i].checkPopping(tipX, tipY);
+      let popped = bubbles[i].checkPopping(tipX, tipY);
+
+      if (popped) {
+        score++;
+      }
     }
+
+    // bubbles.displayScore();
   }
-
-  //movement of bubble
-  // bubble.x += bubble.vx;
-  // bubble.y += bubble.vy;
-  //
-  // //reset bubble position
-  // if (bubble.y < 0) {
-  //   bubble.x = random(width);
-  //   bubble.y = height;
-  // }
-
-  // push();
-  // fill(0, 100, 200);
-  // noStroke();
-  // ellipse(bubble.x, bubble.y, bubble.size);
-  // pop();
 
   //display bubble and make it move
   for (let i = 0; i < bubbles.length; i++) {
     bubbles[i].update();
   }
+
+  push();
+  textSize(36);
+  fill(255);
+  textAlign(CENTER, CENTER);
+  text(score, width - 100, 100);
+  pop();
 }
