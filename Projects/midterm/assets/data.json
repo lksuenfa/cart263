@@ -1,0 +1,49 @@
+{
+  "description": "Types of auras, from (https://hunterxhunter.fandom.com/wiki/Nen)",
+
+  "nen_types": [
+    {
+      "enhancement": {
+        "description": "Strengthening objects or themselves",
+
+        "divination": "Oohh! The volume of water increased."
+      },
+
+      "transmutation": {
+        "description": "Changing the quality or aura to match something else",
+
+        "divination": [
+          "Ohh! The water tastes sweeter than strawberry jam.",
+          "Ohh! The water tastes saltier than that pink fancy salt in your kitchen.",
+          "Ohh! The water tastes sour like pickles on a summer day.",
+          "Ohh! The water tastes bitter like my love life.",
+          "Ohh! The water tastes more umami than the MSG in Uncle Roger's fried rice."
+        ]
+      },
+
+      "conjuration": {
+        "description": "Creating objects from aura",
+
+        "divination": "Something appeared in the water!!!!"
+      },
+
+      "specialization": {
+        "description": "Nen types distribution and relative position",
+
+        "divination": "Ohhh!! what is this?."
+      },
+
+      "manipulation": {
+        "description": "Controlling animals and inanimate things",
+
+        "divination": "Oohh!! The leaf is moving."
+      },
+
+      "emission": {
+        "description": "Detaching aura from the body",
+
+        "divination": "Ooohh!! The colour of the water changed."
+      }
+    }
+  ]
+}
