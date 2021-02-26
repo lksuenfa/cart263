@@ -1,22 +1,28 @@
 "use strict";
 
 /**************************************************
-Template p5 project
-Pippin Barr
+Secret Hunter Exam
+Leanne Suen Fa
 
-Here is a description of this template p5 project.
+Use water divination to discover your aura type and become a real Hunter.
 **************************************************/
 
+//screens
+let displayScreen = undefined;
+let screen = 0; //start with screen 0 which is title screen
 // setup()
-//
-// Description of setup() goes here.
 function setup() {
-
+  createCanvas(windowWidth, windowHeight);
 }
 
 // draw()
-//
-// Description of draw() goes here.
 function draw() {
+  //display screen
+  displayScreen = new Screen(screen);
+  displayScreen.updateScreen();
+}
 
+function mousePressed() {
+  //change screens on click
+  screen++;
 }
