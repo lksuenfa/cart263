@@ -2,9 +2,9 @@ class Screen {
   constructor(screen) {
     // text colour
     this.red = {
-      r: 214,
-      g: 51,
-      b: 37,
+      r: 245,
+      g: 27,
+      b: 103,
     };
 
     //background colour

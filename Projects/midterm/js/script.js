@@ -14,11 +14,16 @@ try to load script into a JSON file
 let displayScreen = undefined;
 let screen = 0; //start with screen 0 which is title screen
 const SIMULATION_SCREEN = 4;
+
+//glass
+let glass = undefined;
+
 function preload() {}
 
 // setup()
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  noStroke();
 }
 
 // draw()
@@ -28,7 +33,11 @@ function draw() {
     displayScreen = new Screen(screen);
     displayScreen.updateScreen();
   } else {
-    background(0);
+    background(245, 27, 103);
+
+    //draw glass
+    glass = new Glass();
+    glass.display();
   }
 }
 
