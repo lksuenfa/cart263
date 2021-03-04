@@ -1,0 +1,40 @@
+{
+  "description": "Types of auras, from (https://hunterxhunter.fandom.com/wiki/Nen)",
+
+  "nen_types": [
+    {
+      "name": "enhancement",
+      "description": "strengthen objects or yourself",
+      "divination": "The volume of water increased."
+    },
+    {
+      "name": "transmutation",
+      "description": "change the quality and properties of your aura",
+      "divination": "The water tastes sweet"
+    },
+
+    {
+      "name": "conjuration",
+      "description": "create objects from aura",
+      "divination": "Something appeared in the water!!!!"
+    },
+
+    {
+      "name": "specialization",
+      "description": "develop a different ability as your aura doesn't fall within the other classes",
+      "divination": "What is this?"
+    },
+
+    {
+      "name": "manipulation",
+      "description": "control animals and inanimate things",
+      "divination": "The leaf is moving."
+    },
+
+    {
+      "name": "emission",
+      "description": "detach your aura from your body",
+      "divination": "The colour of the water changed."
+    }
+  ]
+}

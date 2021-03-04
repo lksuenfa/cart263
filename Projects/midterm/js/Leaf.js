@@ -5,10 +5,18 @@ class Leaf {
       y: height / 2 - 85,
       img: img,
       vy: 1,
+      vx: 2,
     };
     const glassHeight = width / 2 - 100;
   }
 
+  move() {
+    if (this.leaf.x < width / 2 - 40) {
+      this.leaf.x += this.leaf.vx;
+    } else if (this.leaf.x > width / 2) {
+      this.leaf.x -= this.leaf.vx;
+    }
+  }
   float() {
     if (this.leaf.x > glassHeight) {
       this.leaf.y -= this.leaf.vy;
