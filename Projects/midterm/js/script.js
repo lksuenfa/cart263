@@ -18,7 +18,13 @@ const SIMULATION_SCREEN = 4;
 //glass
 let glass = undefined;
 
-function preload() {}
+//Leaf
+let leafImage = undefined;
+let leaf = undefined;
+
+function preload() {
+  leafImage = loadImage("assets/images/leaf.png");
+}
 
 // setup()
 function setup() {
@@ -34,6 +40,10 @@ function draw() {
     displayScreen.updateScreen();
   } else {
     background(245, 27, 103);
+
+    //display leaf behind Glass
+    leaf = new Leaf(leafImage);
+    leaf.display();
 
     //draw glass
     glass = new Glass();

@@ -39,8 +39,10 @@ class Glass {
 
   //increase water
   increase() {
-    this.water.height += this.water.vy;
-    this.water.y -= this.water.vy;
+    if (this.water.x > this.glass.x) {
+      this.water.height += this.water.vy;
+      this.water.y -= this.water.vy;
+    }
   }
 
   //make water disappear by turning it transparent
