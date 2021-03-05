@@ -25,11 +25,6 @@ let leaf = undefined;
 //global variable to store nen data
 let nenData;
 let randomNen;
-let nenInfo = {
-  type: undefined,
-  description: undefined,
-  divination: undefined,
-};
 
 //user's webcam
 let video = undefined;
@@ -107,15 +102,15 @@ function draw() {
 
     //does not work
     //animate leaf according to nen type
-    if (nenInfo.type === "enhancement") {
+    if (randomNen.name === "enhancement") {
       glass.increase();
-    } else if (nenInfo.type === "conjurer") {
+    } else if (randomNen.name === "conjurer") {
       glass.impurities();
-    } else if (nenInfo.type === "emission") {
+    } else if (randomNen.name === "emission") {
       glass.changeColour();
-    } else if (nenInfo.type === "manipulation") {
+    } else if (randomNen.name === "manipulation") {
       leaf.move();
-    } else if (nenInfo.type === "specialization") {
+    } else if (randomNen.name === "specialization") {
       glass.disappear();
     }
 
@@ -139,20 +134,15 @@ function mousePressed() {
 
 function nenLoaded(data) {
   nenData = data;
-
   //choose a random nen type
   randomNen = random(nenData.nen_types);
-  //assign name of nen type
-  nenInfo.type = randomNen.name;
-  nenInfo.description = randomNen.description;
-  nenInfo.divination = randomNen.divination;
 }
 
 //display Nen  and its properties
 function displayNen() {
-  let nenProfile = `Oooh! ${nenInfo.divination}
-  Your aura type is ${nenInfo.type}.
-  You will be able to ${nenInfo.description}.
+  let nenProfile = `Oooh! ${randomNen.divination}
+  Your aura type is ${randomNen.name}.
+  You will be able to ${randomNen.description}.
   `;
 
   push();
