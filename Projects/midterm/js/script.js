@@ -31,6 +31,15 @@ let nenInfo = {
   divination: undefined,
 };
 
+//user's webcam
+let video = undefined;
+
+//handpose model
+let handpose = undefined;
+
+//current set of predictions
+let predictions = [];
+
 //preload()
 function preload() {
   leafImage = loadImage("assets/images/leaf.png");
@@ -39,6 +48,22 @@ function preload() {
 // setup()
 function setup() {
   createCanvas(windowWidth, windowHeight);
+
+  // Start webcam and hide the resulting HTML element
+  video = createCapture(VIDEO);
+  video.hide();
+
+  //load handpose
+  handpose = ml5.handpose(video, { flipHorizontal: true }, function () {
+    console.log(`Model loaded`);
+  });
+
+  //listen for predictions
+  handpose.on(`predict`, function (results) {
+    console.log(results);
+    predictions = results;
+  });
+
   noStroke();
 }
 
@@ -48,7 +73,7 @@ function draw() {
     //display screen
     displayScreen = new Screen(screen);
     displayScreen.updateScreen();
-  } else {
+  } else if (screen === SIMULATION_SCREEN) {
     background(245, 27, 103);
 
     //display leaf behind Glass
@@ -59,14 +84,34 @@ function draw() {
     glass = new Glass();
     glass.display();
 
-    //DOES NOT WORK
-    //animations
+    //Hand posture
+    // if there is a hand detected in the array predictions
+    if (predictions.length > 0) {
+      //change screens
+      screen = 5;
+    }
+  } else if (screen === 5) {
+    // DOES NOT WORK
+    // animations;
+
+    background(0);
+
+    // background(245, 27, 103);
+    //display leaf behind Glass
+    leaf = new Leaf(leafImage);
+    leaf.display();
+
+    //draw glass
+    glass = new Glass();
+    glass.display();
+
+    //does not work
+    //animate leaf according to nen type
     if (nenInfo.type === "enhancement") {
       glass.increase();
     } else if (nenInfo.type === "conjurer") {
       glass.impurities();
-    }
-    if (nenInfo.type === "emission") {
+    } else if (nenInfo.type === "emission") {
       glass.changeColour();
     } else if (nenInfo.type === "manipulation") {
       leaf.move();
@@ -74,15 +119,17 @@ function draw() {
       glass.disappear();
     }
 
-    //display nen info
-    else displayNen();
+    // display nen info
+    displayNen();
   }
 }
 
 //mousePressed()
 function mousePressed() {
   //change screens on click
-  screen++;
+  if (screen < SIMULATION_SCREEN) {
+    screen++;
+  }
 
   //load nen data during simulation screen only
   if (screen === SIMULATION_SCREEN) {

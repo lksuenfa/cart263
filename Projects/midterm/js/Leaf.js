@@ -4,18 +4,18 @@ class Leaf {
       x: width / 2 - 20,
       y: height / 2 - 85,
       img: img,
-      vy: 1,
-      vx: 2,
+      vy: 10,
+      vx: 10,
     };
     const glassHeight = width / 2 - 100;
   }
 
   move() {
-    if (this.leaf.x < width / 2 - 40) {
-      this.leaf.x += this.leaf.vx;
-    } else if (this.leaf.x > width / 2) {
-      this.leaf.x -= this.leaf.vx;
-    }
+    // if (this.leaf.x < width / 2 - 40) {
+    this.leaf.x += this.leaf.vx;
+    // } else if (this.leaf.x > width / 2) {
+    //   this.leaf.x -= this.leaf.vx;
+    // }
   }
   float() {
     if (this.leaf.x > glassHeight) {
