@@ -27,7 +27,13 @@ class Glass {
       vy: 10,
     };
 
-    this.impurities = 100;
+    // this.impurities = {
+    //   x: random(this.water.x, this.water.x + this.water.width),
+    //   y: random(this.water.y, this.water.y + this.water.height),
+    //   size: 10,
+    // };
+
+    this.impurities = 10;
   }
 
   //change colour of water
@@ -39,11 +45,16 @@ class Glass {
 
   //increase water
   increase() {
-    this.water.height += this.water.vy;
-    // if (this.water.x > this.glass.x) {
-    //   this.water.height += this.water.vy;
-    //   this.water.y -= this.water.vy;
-    // }
+    //if water can only go up 10px above glass level
+    if (
+      this.water.y > this.glass.y - 10 &&
+      this.water.y < this.glass.y + this.glass.height
+    ) {
+      //increase water
+      this.water.height += this.water.vy;
+      //move position of water.y so that it looks like it is increasing instead of moving down the screen
+      this.water.y -= this.water.vy;
+    }
   }
 
   //make water disappear by turning it transparent
@@ -52,14 +63,20 @@ class Glass {
   }
 
   //make impurities appear in water
-  impurities() {
-    for (let i = 0; i < this.impurities; i++) {
-      let x = random(this.water.x, this.water.x + this.water.width);
-      let y = random(this.water.y, this.water.y + this.water.height);
-      stroke(255);
-      point(x, y);
-    }
-  }
+  // impurities() {
+  //   for (let i = 0; i < this.impurities; i++) {
+  //   let x = random(this.water.x, this.water.x + this.water.width);
+  //   let y = random(this.water.y, this.water.y + this.water.height);
+  //     stroke(0);
+  //     strokeWeight(4);
+  //     point(x, y);
+  //   }
+  //
+  // push();
+  // fill(0);
+  // ellipse(impurities.x, impurities.y, impurities.size);
+  // pop();
+  // }
 
   display() {
     //display glass

@@ -60,6 +60,12 @@ function setup() {
   });
 
   noStroke();
+
+  //  //display leaf behind Glass
+  leaf = new Leaf(leafImage);
+
+  //draw glass
+  glass = new Glass();
 }
 
 // draw()
@@ -70,13 +76,7 @@ function draw() {
     displayScreen.updateScreen();
   } else if (screen === SIMULATION_SCREEN) {
     background(245, 27, 103);
-
-    //display leaf behind Glass
-    leaf = new Leaf(leafImage);
     leaf.display();
-
-    //draw glass
-    glass = new Glass();
     glass.display();
 
     //Hand posture
@@ -86,32 +86,48 @@ function draw() {
       screen = 5;
     }
   } else if (screen === 5) {
-    // DOES NOT WORK
-    // animations;
-
-    background(0);
-
-    // background(245, 27, 103);
-    //display leaf behind Glass
-    leaf = new Leaf(leafImage);
+    background(245, 27, 103);
     leaf.display();
-
-    //draw glass
-    glass = new Glass();
     glass.display();
 
-    //does not work
-    //animate leaf according to nen type
+    console.log(randomNen.name);
+
+    // animate leaf according to nen type
+
+    //if enhancement water increases and leaf floats
     if (randomNen.name === "enhancement") {
       glass.increase();
-    } else if (randomNen.name === "conjurer") {
-      glass.impurities();
+      leaf.float();
+
+      //if conjuration, make impurities appear
+    } else if (randomNen.name === "conjuration") {
+      // glass.impurities();
+
+      //make impurities appear
+      let impurities = 10;
+
+      //make up to 10 appear
+      for (let i = 0; i < impurities; i++) {
+        //positioned randomly within water
+        let x = random(520, 630);
+        let y = random(280, 350);
+        stroke(0);
+        strokeWeight(4);
+        point(x, y);
+      }
+
+      //if emission change colour of water
     } else if (randomNen.name === "emission") {
       glass.changeColour();
+
+      //if manipulation make leaf move
     } else if (randomNen.name === "manipulation") {
       leaf.move();
+
+      //if specialization make water disappear
     } else if (randomNen.name === "specialization") {
       glass.disappear();
+      leaf.fall();
     }
 
     // display nen info
@@ -147,7 +163,7 @@ function displayNen() {
 
   push();
   textSize(32);
-  textAlign(CENTER, CENTER);
+  textAlign(LEFT, CENTER);
   fill(255, 255, 0);
   rectMode(CENTER);
   text(nenProfile, width / 2, height / 2, width / 2, height / 2);

@@ -80,6 +80,7 @@ class Screen {
     text("<< Click to start >>", this.x, this.y + 100);
     pop();
 
+    //make responsive voice welcome user
     responsiveVoice.speak("Welcome HUNTER! ");
   }
 

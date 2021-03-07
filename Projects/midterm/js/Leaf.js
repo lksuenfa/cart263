@@ -5,23 +5,31 @@ class Leaf {
       y: height / 2 - 85,
       img: img,
       vy: 10,
-      vx: 10,
+      vx: random(-2, 2),
     };
-    const glassHeight = width / 2 - 100;
   }
 
-  move() {
-    // if (this.leaf.x < width / 2 - 40) {
-    this.leaf.x += this.leaf.vx;
-    // } else if (this.leaf.x > width / 2) {
-    //   this.leaf.x -= this.leaf.vx;
-    // }
+  //fall to bottom of glass
+  fall() {
+    if (this.leaf.y < 610) {
+      this.leaf.y += this.leaf.vy;
+    }
   }
+
+  //move slightly right and left
+  move() {
+    this.leaf.x += this.leaf.vx;
+  }
+
+  //move up following water
   float() {
-    if (this.leaf.x > glassHeight) {
+    if (this.leaf.y > 140) {
+      //move leaf up too
       this.leaf.y -= this.leaf.vy;
     }
   }
+
+  //display leaf
   display() {
     push();
     imageMode(CENTER);
