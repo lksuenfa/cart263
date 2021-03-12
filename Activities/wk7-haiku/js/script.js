@@ -2,6 +2,7 @@
 Haikuu Generator
 Leanne Suen Fa
 
+Generates a random interactice haiku
 
 */
 
