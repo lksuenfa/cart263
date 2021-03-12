@@ -1,0 +1,29 @@
+@import "https://fonts.googleapis.com/css2?family=Teko:wght@700&display=swap";
+
+/* css reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: burlywood;
+  font-size: 16;
+
+  /* background */
+  background-color: #e0e0e0;
+  height: 100vh;
+  border: 20px solid white;
+
+  padding: 3rem;
+}
+
+#title {
+  font-family: teko, sans-serif;
+  font-size: 8rem;
+}
+#haiku {
+  font-family: helvetica, sans-serif;
+  font-size: 3rem;
+}
