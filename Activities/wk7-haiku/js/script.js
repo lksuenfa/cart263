@@ -30,7 +30,7 @@ let titleData = [
   `Sadness in the dark`,
   `Dawn and floss`,
   `To try or not to try`,
-  `O trees`,
+  `Unagi`,
 ];
 let title = document.getElementById(`title`);
 let line1P = document.getElementById(`line-1`);
