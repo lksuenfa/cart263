@@ -1,0 +1,21 @@
+@import "https://fonts.googleapis.com/css2?family=Syne+Mono&display=swap";
+
+#secret-document {
+  font-family: Syne Mono, sans-serif;
+
+  width: 50vw;
+  margin: auto;
+
+  background-color: beige;
+  padding: 100px;
+}
+
+.redacted {
+  background-color: black;
+  user-select: none;
+}
+
+.revealed {
+  color: darkred;
+  text-decoration: underline;
+}
