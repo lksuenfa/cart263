@@ -43,7 +43,7 @@ $(`#answer`).droppable({
     ui.draggable.removeClass(`found`);
 
     // check if right
-    if ($(this).text() === `Theremin`) {
+    if ($(this).text() === `orange`) {
       $(`#solved-dialog`).dialog(`open`);
     }
   },
