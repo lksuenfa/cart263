@@ -1,11 +1,11 @@
 /**
-Title of Project
-Author Name
+Leanne Suen Fa
+Hypoglycemia simulation game
 
-This is a template. You must fill in the title,
-author, and this description to match your project!
+Navigate through the basic steps of managing variations in blood sugar level
 */
 
 "use strict";
 
-// Code goes here
+// <button onclick="/simulation.html">Next</button>;
+
