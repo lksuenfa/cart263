@@ -3,7 +3,12 @@
 let bloodSugar = document.getElementById("blood-sugar");
 
 // display random blood sugar
-bloodSugar.innerHTML = " Blood sugar : " + randomIntFromInterval(1, 15);
+bloodSugar.innerHTML = " Blood sugar : " + randomIntFromInterval(1, 4);
+
+// https://jqueryui.com/selectable/
+$(function () {
+  $("#selectable").selectable();
+});
 
 // Generate a random number and round it up
 function randomIntFromInterval(min, max) {
