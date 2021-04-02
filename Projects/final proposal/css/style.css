@@ -12,3 +12,11 @@ font-family: 'Source Sans Pro', sans-serif;
   margin: 0;
   box-sizing: border-box;
 }
+
+.clicked {
+  color: red;
+}
+
+h4 {
+  color: white;
+}

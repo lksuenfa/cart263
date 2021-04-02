@@ -1,0 +1,37 @@
+{
+  " description": "Information on hypoglycemia",
+
+  "symptoms": [
+    {
+      "autonomic": [
+        "trembling",
+        "palpitations",
+        "sweating",
+        "anxiety",
+        "hunger",
+        "nausea",
+        "tingling"
+      ]
+    },
+    {
+      "neuroglycopenic": [
+        "difficulty concentrating",
+        "confusion",
+        "weakness",
+        "drowsiness",
+        "vision changes",
+        "difficulty speaking",
+        "headache",
+        "dizziness"
+      ]
+    },
+    "unconscious"
+  ],
+
+  "snacks": [
+    " 15g glucose",
+    "1 TBS honey",
+    "150ml juice or soft drink",
+    "15g candy"
+  ]
+}

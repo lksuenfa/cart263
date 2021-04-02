@@ -6,8 +6,16 @@ let bloodSugar = document.getElementById("blood-sugar");
 bloodSugar.innerHTML = " Blood sugar : " + randomIntFromInterval(1, 4);
 
 // https://jqueryui.com/selectable/
+//change colour when selected
 $(function () {
-  $("#selectable").selectable();
+  $(`#selectable`).selectable();
+});
+
+// haven't figured out the quiz system yet
+//on click
+// if $(`#selectable`)
+$(`#symptoms`).on(`click`, function (event) {
+  console.log("you're dying");
 });
 
 // Generate a random number and round it up
