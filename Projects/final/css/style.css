@@ -8,15 +8,33 @@ font-family: 'Source Sans Pro', sans-serif;
  */
 
 * {
+  background: #fff0b8;
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+
+  font-family: "Source Sans Pro", sans-serif;
 }
 
-.clicked {
-  color: red;
+h1 {
+  padding-top: 2em;
+  padding-left: 0.5em;
+  font-family: "Kiwi Maru", serif;
+  font-size: 6em;
+}
+
+h2 {
+  padding-top: 1em;
+  padding-left: 2em;
+
+  font-weight: bold;
+  font-size: 2em;
+}
+
+h3 {
+  font-size: 4em;
 }
 
 h4 {
-  color: white;
+  font-size: 2em;
 }
