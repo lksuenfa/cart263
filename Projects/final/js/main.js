@@ -13,7 +13,8 @@ let config = {
   type: Phaser.AUTO,
   width: 1000,
   height: 700,
-  scene: [],
+  backgroundColor: `#fff0b8`,
+  scene: [Boot, Play, Kitchen],
 };
 
 let game = new Phaser.Game(config);
