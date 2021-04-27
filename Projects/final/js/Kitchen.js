@@ -9,7 +9,7 @@ class Kitchen extends Phaser.Scene {
     //add images
     this.kitchen = this.add.image(500, 200, `kitchen`);
     this.kitchen.setScale(2.5);
-    this.healthBar = this.add.image(20, 50, `healthBar`);
+    this.healthBar = this.add.image(450, 200, `healthBar`);
 
     //add sprites
     this.oscar = this.add.sprite(500, 300, `unwell`).setInteractive();
@@ -39,7 +39,7 @@ class Kitchen extends Phaser.Scene {
       this.style
     );
     //set visibility of item
-    // this.bloodSugarDisplay.setVisible(false);
+    this.bloodSugarDisplay.setVisible(false);
 
     //drag object
     this.input.setDraggable(this.glucometer);
@@ -71,8 +71,9 @@ class Kitchen extends Phaser.Scene {
     });
 
     //health bar
-    this.healthBar.maxWidth = 20;
-    this.healthBar.maxHeight = 200;
+    //source; Pippin Barr
+    this.healthBar.maxWidth = 200;
+    this.healthBar.maxHeight = 10;
     this.healthBar.setOrigin(0, 0);
 
     //ratio of blood sugar reading as a fraction of the max blood sugar for display
@@ -80,23 +81,25 @@ class Kitchen extends Phaser.Scene {
 
     //display this ratio as proportional to max height
     this.healthBar.setScale(
-      this.healthBar.maxWidth,
-      this.healthBar.maxHeight * this.ratio
+      this.healthBar.maxWidth * this.ratio,
+      this.healthBar.maxHeight
     );
-    //set to invisible
-    // this.healthBar.setVisible(false);
   }
 
   update() {
+    // this.value--;
+    //continuous decrease  of blood sugar value
+    this.bloodSugarValue -= 0.01;
+
     //check for overlap
+    //source: Pippin Barr
     this.overlap = Phaser.Geom.Intersects.RectangleToRectangle(
       this.oscar.getBounds(),
       this.glucometer.getBounds()
     );
 
     //display if overlap is true
-    // this.bloodSugarDisplay.setVisible(this.overlap);
-    // this.healthBar.setVisible(this.overlap);
+    this.bloodSugarDisplay.setVisible(this.overlap);
   }
 }
 
