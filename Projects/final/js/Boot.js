@@ -11,6 +11,7 @@ class Boot extends Phaser.Scene {
     this.load.image(`glucagon`, `assets/images/glucagon.svg`);
     this.load.image(`glucometer`, `assets/images/glucometer.svg`);
     this.load.image(`juice`, `assets/images/juice.svg`);
+    this.load.image(`healthBar`, `assets/images/Hp.png`);
 
     // Switch to the Play scene after loading using 'complete' event listener
     this.load.on(`complete`, () => {

@@ -4,9 +4,12 @@ class Kitchen extends Phaser.Scene {
   }
 
   create() {
+    const MAXBLOODSUGAR = 7;
+
     //add images
     this.kitchen = this.add.image(500, 200, `kitchen`);
     this.kitchen.setScale(2.5);
+    this.healthBar = this.add.image(20, 50, `healthBar`);
 
     //add sprites
     this.oscar = this.add.sprite(500, 300, `unwell`).setInteractive();
@@ -35,7 +38,8 @@ class Kitchen extends Phaser.Scene {
       this.bloodSugarValue,
       this.style
     );
-    this.bloodSugarDisplay.setVisible(false);
+    //set visibility of item
+    // this.bloodSugarDisplay.setVisible(false);
 
     //drag object
     this.input.setDraggable(this.glucometer);
@@ -65,6 +69,22 @@ class Kitchen extends Phaser.Scene {
         this.textDisplay.text = "Oscar is feeling a lot better";
       }
     });
+
+    //health bar
+    this.healthBar.maxWidth = 20;
+    this.healthBar.maxHeight = 200;
+    this.healthBar.setOrigin(0, 0);
+
+    //ratio of blood sugar reading as a fraction of the max blood sugar for display
+    this.ratio = this.bloodSugarValue / MAXBLOODSUGAR;
+
+    //display this ratio as proportional to max height
+    this.healthBar.setScale(
+      this.healthBar.maxWidth,
+      this.healthBar.maxHeight * this.ratio
+    );
+    //set to invisible
+    // this.healthBar.setVisible(false);
   }
 
   update() {
@@ -74,8 +94,9 @@ class Kitchen extends Phaser.Scene {
       this.glucometer.getBounds()
     );
 
-    //message displayed if overlap is true
-    this.bloodSugarDisplay.setVisible(this.overlap);
+    //display if overlap is true
+    // this.bloodSugarDisplay.setVisible(this.overlap);
+    // this.healthBar.setVisible(this.overlap);
   }
 }
 
