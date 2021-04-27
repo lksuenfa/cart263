@@ -16,7 +16,7 @@ class Play extends Phaser.Scene {
 
     let description = `Oscar has diabetes and is feeling faint ... Help him feel better.`;
 
-    this.add.text(100, 400, description, style);
+    this.add.text(100, 500, description, style);
 
     this.input.on(
       "pointerup",
