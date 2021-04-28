@@ -88,7 +88,13 @@ class Kitchen extends Phaser.Scene {
 
   update() {
     //continuous decrease  of blood sugar value
-    this.bloodSugarValue -= 0.01;
+    this.bloodSugarValue -= 0.00001;
+    this.bloodSugarDisplay = this.add.text(
+      20,
+      20,
+      this.bloodSugarValue,
+      this.style
+    );
 
     //check for overlap
     //source: Pippin Barr
