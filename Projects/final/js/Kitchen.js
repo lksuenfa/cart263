@@ -1,10 +1,11 @@
+const MAXBLOODSUGAR = 7;
+
 class Kitchen extends Phaser.Scene {
   constructor() {
     super({ key: `kitchen` });
   }
-
   create() {
-    const MAXBLOODSUGAR = 7;
+    // const MAXBLOODSUGAR = 7;
 
     //add images
     this.kitchen = this.add.image(500, 200, `kitchen`);
@@ -28,7 +29,7 @@ class Kitchen extends Phaser.Scene {
     };
 
     this.description = `Explore Oscar's environment to find out what's wrong`;
-    this.bloodSugarValue = randomIntFromInterval(1, 3);
+    this.bloodSugarValue = randomIntFromInterval(2, 3);
 
     //display text
     this.textDisplay = this.add.text(100, 500, this.description, this.style);
@@ -50,26 +51,6 @@ class Kitchen extends Phaser.Scene {
       gameObject.y = dragY;
     });
 
-    // change text when clicking on spriteon click
-    this.oscar.on("pointerdown", function (pointer) {
-      //if BG < 2.8, Oscar faints
-      if (this.bloodSugarValue < 2.8) {
-        this.textDisplay.text = "Help! Oscar has fainted!!";
-      }
-      // if BG between 2.8 and 3.5, then display neuroglycopenic symptoms
-      else if (this.bloodSugarValue > 2.8 && this.bloodSugarValue < 3.5) {
-        this.textDisplay.text = "Oscar is feeling dizzy and drowsy";
-
-        //if BG between 3.5 and 4 then display autonomic symptoms
-      } else if (this.bloodSugarValue > 3.5 && this.bloodSugarValue < 4) {
-        this.textDisplay.text = "Oscar is feeling hungry and nauseous";
-
-        //no hypoglycemia if BG > 4
-      } else if (this.bloodSugarValue > 4) {
-        this.textDisplay.text = "Oscar is feeling a lot better";
-      }
-    });
-
     //health bar
     //source; Pippin Barr
     this.healthBar.maxWidth = 200;
@@ -87,14 +68,41 @@ class Kitchen extends Phaser.Scene {
   }
 
   update() {
-    //continuous decrease  of blood sugar value
-    this.bloodSugarValue -= 0.00001;
-    this.bloodSugarDisplay = this.add.text(
-      20,
-      20,
-      this.bloodSugarValue,
-      this.style
+    //continuous decrease  of blood sugar value until 0
+    if (this.bloodSugarValue > 0) {
+      this.bloodSugarValue -= 0.005;
+    }
+
+    //Source: Pippin Barr
+    this.bloodSugarDisplay.text = Math.round(this.bloodSugarValue * 10) / 10; // Update the text
+
+    // Recalculate current blood sugar ratio
+    this.ratio = this.bloodSugarValue / MAXBLOODSUGAR;
+    // Update the width of the health bar
+    this.healthBar.setScale(
+      this.healthBar.maxWidth * this.ratio,
+      this.healthBar.maxHeight
     );
+    // updateHealthBar();
+
+    // display symptoms according to BG
+    //if BG < 2.8, Oscar faints
+    if (this.bloodSugarValue < 2.8) {
+      this.textDisplay.text = "Help! Oscar has fainted!!";
+    }
+    // if BG between 2.8 and 3.5, then display neuroglycopenic symptoms
+    else if (this.bloodSugarValue > 2.8 && this.bloodSugarValue < 3.5) {
+      this.textDisplay.text = "Oscar is feeling dizzy and drowsy";
+
+      //if BG between 3.5 and 4 then display autonomic symptoms
+    } else if (this.bloodSugarValue > 3.5 && this.bloodSugarValue < 4) {
+      this.textDisplay.text = "Oscar is feeling hungry and nauseous";
+
+      //no hypoglycemia if BG > 4
+    } else if (this.bloodSugarValue > 4) {
+      this.textDisplay.text = "Oscar is feeling a lot better";
+    }
+    this.textDisplay.setVisible(false);
 
     //check for overlap
     //source: Pippin Barr
@@ -105,7 +113,18 @@ class Kitchen extends Phaser.Scene {
 
     //display if overlap is true
     this.bloodSugarDisplay.setVisible(this.overlap);
+    this.textDisplay.setVisible(this.overlap);
   }
+}
+
+function updateHealthBar() {
+  // // Recalculate current blood sugar ratio
+  // this.ratio = this.bloodSugarValue / MAXBLOODSUGAR;
+  // // Update the width of the health bar
+  // this.healthBar.setScale(
+  //   this.healthBar.maxWidth * this.ratio,
+  //   this.healthBar.maxHeight
+  // );
 }
 
 // Generate a random number and round it up
