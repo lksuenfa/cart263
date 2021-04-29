@@ -15,7 +15,7 @@ let config = {
   width: 1000,
   height: 700,
   backgroundColor: `#fff0b8`,
-  scene: [Boot, Play, Kitchen, Lose],
+  scene: [Boot, Play, Kitchen, Victory, Lose],
 };
 
 let game = new Phaser.Game(config);

@@ -2,6 +2,7 @@ const BLOODSUGAR = {
   severeLow: 2.8,
   low: 3.5,
   hypoglycemia: 4,
+  good: 5,
   max: 7,
 };
 
@@ -27,9 +28,6 @@ class Kitchen extends Phaser.Scene {
     this.juice.setScale(0.5);
     this.glucometer.setScale(0.5);
 
-    // //create drop zone
-    // this.oscar.input.dropZone = true;
-
     //drag object
     this.input.setDraggable(this.glucometer);
     this.input.setDraggable(this.juice);
@@ -51,13 +49,19 @@ class Kitchen extends Phaser.Scene {
       color: `#bf0442`,
     };
 
-    // add text
-    this.description = `Explore Oscar's environment to find out what's wrong`;
+    //set a highlight style for text
+    this.highlightStyle = {
+      fontFamily: `Kiwi Maru`,
+      fontSize: 100,
+      color: `#bf0442`,
+      backgroundColor: `black`,
+    };
+
     //set a random number for BG value
     this.bloodSugarValue = this.randomIntFromInterval(2, 3);
 
     //display text
-    this.symptoms = this.add.text(100, 500, this.description, this.textStyle);
+    this.symptoms = this.add.text(100, 500, ``, this.textStyle);
     this.response = this.add.text(100, 550, ``, this.textStyle);
     this.bloodSugarDisplay = this.add.text(
       20,
@@ -70,26 +74,27 @@ class Kitchen extends Phaser.Scene {
     this.response.setVisible(false);
     this.bloodSugarDisplay.setVisible(false);
 
-    //health bar
-    //source; Pippin Barr
+    //create a health bar
     this.healthBar.maxWidth = 200;
     this.healthBar.maxHeight = 10;
     this.healthBar.setOrigin(0, 0);
-
-    //ratio of blood sugar reading as a fraction of the max blood sugar for display
-    this.ratio = this.bloodSugarValue / BLOODSUGAR.maxSUGAR;
-
-    //display this ratio as proportional to max height
-    this.healthBar.setScale(
-      this.healthBar.maxWidth * this.ratio,
-      this.healthBar.maxHeight
-    );
+    this.updateHealth();
   }
 
   update() {
-    //continuous decrease  of blood sugar value until 0
-    if (this.bloodSugarValue > 0) {
-      this.bloodSugarValue -= 0.005;
+    //continuous decrease  of blood sugar value
+    this.bloodSugarValue -= 0.005;
+
+    //lose if BG falls below 0.1
+    if (this.bloodSugarValue < 0.1) {
+      this.add.text(100, 100, `Game Over`, this.highlightStyle);
+      this.input.on("pointerdown", () => this.scene.start("lose"));
+    }
+
+    //win if BG > 5
+    else if (this.bloodSugarValue >= BLOODSUGAR.good) {
+      this.add.text(100, 100, `You Win`, this.highlightStyle);
+      this.input.on("pointerdown", () => this.scene.start("victory"));
     }
 
     this.updateHealth();
@@ -101,9 +106,9 @@ class Kitchen extends Phaser.Scene {
   //Update health Bar
   //Adapted from Pippin Barr
   updateHealth() {
-    // Recalculate current blood sugar ratio
-    this.ratio = this.bloodSugarValue / BLOODSUGAR.maxSUGAR;
-    // Update the width of the health bar
+    //ratio of blood sugar reading as a fraction of the max blood sugar for display
+    this.ratio = this.bloodSugarValue / BLOODSUGAR.max;
+    //display this ratio as proportional to max height
     this.healthBar.setScale(
       this.healthBar.maxWidth * this.ratio,
       this.healthBar.maxHeight
@@ -117,21 +122,8 @@ class Kitchen extends Phaser.Scene {
 
   //interactions of juice, blood sugar reading and glucagon with oscar
   interact() {
-    this.finalStyle = {
-      fontFamily: `Kiwi Maru`,
-      fontSize: 100,
-      color: `#bf0442`,
-      backgroundColor: `black`,
-    };
-
-    //lose if BG falls below 0.1
-    if (this.bloodSugarValue < 0.1) {
-      this.add.text(100, 100, `Game Over`, this.finalStyle);
-      this.input.on("pointerdown", () => this.scene.start("lose"));
-    }
-
     //if BG < or = 2.8, severe hypoglycemia
-    else if (this.bloodSugarValue <= BLOODSUGAR.severeLow) {
+    if (this.bloodSugarValue <= BLOODSUGAR.severeLow) {
       //if overlap with glucometer
       if (this.checkOscar) {
         this.symptoms.text = "Help! Oscar has fainted!!";
@@ -151,19 +143,26 @@ class Kitchen extends Phaser.Scene {
         this.symptoms.text = "Oscar will feel better soon!!";
       }
 
-      //if BG > 2.8 but less than max allowed in game
+      //if BG > 2.8 but not good enough to win
     } else if (
       this.bloodSugarValue > BLOODSUGAR.severeLow &&
-      this.bloodSugarValue < BLOODSUGAR.max
+      this.bloodSugarValue < BLOODSUGAR.good
     ) {
+      //if check Oscar with glucometer
       if (this.checkOscar) {
+        //if severely low blood sugar
         if (this.bloodSugarValue <= BLOODSUGAR.low) {
           this.symptoms.text = "Oscar is feeling dizzy and drowsy";
-        } else if (this.bloodSugarValue <= BLOODSUGAR.hypoglycemia) {
+        }
+        //if blood sugar low
+        else if (this.bloodSugarValue <= BLOODSUGAR.hypoglycemia) {
           this.symptoms.text = "Oscar is feeling hungry and nauseous";
-        } else this.symptoms.text = "Oscar is feeling a lot better";
+        }
+        //if blood sugar > 4
+        else this.symptoms.text = "Oscar is feeling a lot better";
       }
 
+      //if juice given
       if (this.giveJuice) {
         this.bloodSugarValue += 0.01; //increase BG
         this.updateBloodSugarDisplay();
@@ -172,6 +171,7 @@ class Kitchen extends Phaser.Scene {
         this.response.setVisible(this.giveJuice);
       }
 
+      //if glucagon given
       if (this.giveGlucagon) {
         this.response.text =
           "It is not that bad! There is no need for glucagon.";
@@ -219,6 +219,9 @@ class Kitchen extends Phaser.Scene {
     return roundedNum;
   }
 }
+
+// //create drop zone
+// this.oscar.input.dropZone = true;
 
 // when dropped
 // this.input.on("drop", function (pointer, gameObject, dropZone) {
