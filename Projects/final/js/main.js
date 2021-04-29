@@ -4,7 +4,8 @@ Help Oscar stay alive
 Leanne Suen Fa
 
 Select the proper items in the correct order according to the random blood sugar reading
-+ Set up using Phaser 3
++ Set up a Phaser 3 Project
++ Display a different message and add points to health bar in response to draggable objects
 **************************************************/
 
 "use strict";

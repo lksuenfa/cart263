@@ -13,6 +13,8 @@ class Boot extends Phaser.Scene {
     this.load.image(`juice`, `assets/images/juice.svg`);
     this.load.image(`healthBar`, `assets/images/Hp.png`);
 
+    this.load.audio(`theme`, `assets/sounds/theme.mp3`);
+
     // Switch to the Play scene after loading using 'complete' event listener
     this.load.on(`complete`, () => {
       this.scene.start(`play`);
