@@ -1,7 +1,18 @@
+/**************************************************
+Hypoglycemia tutorial
+Help Oscar stay alive
+Leanne Suen Fa
+
++ On click, display appropriate text
++ Call dialogue text from JSON file
+**************************************************/
+
 "use strict";
 
 //first screen
 let screen = 0;
+
+let dialogue;
 
 //Kitchen
 let kitchen = {
@@ -19,8 +30,6 @@ let oscar = {
   width: 100,
   height: 150,
   clicked: false,
-  text:
-    "Symptoms are hypoglycemia Oscar might feel will depend on its severity. \n He might feel trembling, palpitations, sweating, anxiety, hunger, nausea or tingling at first. \nIf this blood sugar drops lower he will feel difficulty concentrating, confused,\n headaches, dizzy, weak, drowsy, blurry vision, he will have difficulties speaking.\n \nWithout appropriate treatment, Oscar will die.",
 };
 
 let glucagon = {
@@ -30,8 +39,6 @@ let glucagon = {
   width: 75,
   height: 50,
   clicked: false,
-  text:
-    "Glucagon is an emergency medication used to treat severe hypoglycemia.\n It needs to be administered by another person as Oscar will be unconscious.\n If he doesn't wake up after 15min, we need to call 911.",
 };
 
 let juice = {
@@ -41,8 +48,6 @@ let juice = {
   width: 50,
   height: 50,
   clicked: false,
-  text:
-    "If the symptoms are not severe, a snack can be given to increase \n the level of blood sugar. This snack needs quick sugar like 15g glucose tablets,\n 1 TBS honey, 1/2 glass of juice or 15g candy ",
 };
 
 let glucometer = {
@@ -52,11 +57,10 @@ let glucometer = {
   width: 75,
   height: 100,
   clicked: false,
-  text:
-    "This is a glucometer. It is used to measure the blood sugar.\n The normal value of blood glucose is 4-7 before eating and\n 5-10 when measured 2h after a meal. Below 2.8 is very low. ",
 };
 
 function preload() {
+  dialogue = loadJSON("assets/data/dialogue.json");
   kitchen.img = loadImage("assets/images/kitchen.svg ");
   oscar.img = loadImage("assets/images/unwell.svg ");
   glucagon.img = loadImage("assets/images/glucagon.svg ");
@@ -68,27 +72,37 @@ function setup() {
 }
 
 function draw() {
+  //create scenes to display  information in order
   switch (screen) {
     case 0:
       startScreen();
       break;
 
     case 1:
-      scene1();
+      tutorial();
       break;
   }
 }
 
+//stores components of start screen
 function startScreen() {
   background(211);
-  let textDisplay =
-    " Oscar has diabetes. \n Because of the medication he takes, \nhis blood sugar might drop too low \n causing a condition called hypoglycemia. \n\nExplore his environment to find how to manage this.";
-  addText(textDisplay, height / 2);
+  addText(dialogue.tutorial.intro, height / 2);
 }
 
-function scene1() {
+function tutorial() {
   background(211);
+  addImg();
+}
 
+//On mouse press
+function mousePressed() {
+  screen++;
+  onClick();
+}
+
+//collect all images in one function
+function addImg() {
   imageMode(CENTER);
   image(kitchen.img, kitchen.x, kitchen.y, kitchen.width, kitchen.height);
   image(oscar.img, oscar.x, oscar.y, oscar.width, oscar.height);
@@ -103,16 +117,21 @@ function scene1() {
   image(juice.img, juice.x, juice.y, juice.width, juice.height);
 }
 
-function mousePressed() {
-  screen++;
-
-  clickObject(oscar.x, oscar.y, oscar.width, oscar.height, oscar.text);
+//collect all clickObject functions for each items on screen
+function onClick() {
+  clickObject(
+    oscar.x,
+    oscar.y,
+    oscar.width,
+    oscar.height,
+    dialogue.tutorial.oscar
+  );
   clickObject(
     glucagon.x,
     glucagon.y,
     glucagon.width,
     glucagon.height,
-    glucagon.text
+    dialogue.tutorial.glucagon
   );
 
   clickObject(
@@ -120,14 +139,22 @@ function mousePressed() {
     glucometer.y,
     glucometer.width,
     glucometer.height,
-    glucometer.text
+    dialogue.tutorial.glucometer
   );
-  clickObject(juice.x, juice.y, juice.width, juice.height, juice.text);
+  clickObject(
+    juice.x,
+    juice.y,
+    juice.width,
+    juice.height,
+    dialogue.tutorial.juice
+  );
 }
-
 //click on obejct to get text
 function clickObject(objectX, objectY, width, height, textDisplay) {
+  //distance between mouse and object
   let d = dist(objectX, objectY, mouseX, mouseY);
+
+  //if mouse on object
   if (d < width / 2 || d < height / 2) {
     push();
     noStroke();
@@ -140,6 +167,7 @@ function clickObject(objectX, objectY, width, height, textDisplay) {
   }
 }
 
+//text properties
 function addText(textDisplay, y) {
   push();
   fill(0);

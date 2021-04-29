@@ -1,0 +1,15 @@
+{
+  " description": "script for game",
+
+  "tutorial": {
+    "intro": " Oscar has diabetes. \n Because of the medication he takes, \nhis blood sugar might drop too low \n causing a condition called hypoglycemia. \n\nExplore his environment to find how to manage this.",
+
+    "oscar": "Symptoms are hypoglycemia Oscar might feel will depend on its severity. \n He might feel trembling, palpitations, sweating, anxiety, hunger, nausea or tingling at first. \nIf this blood sugar drops lower he will feel difficulty concentrating, confused,\n headaches, dizzy, weak, drowsy, blurry vision, he will have difficulties speaking.\n \nWithout appropriate treatment, Oscar will die.",
+
+    "glucagon": "Glucagon is an emergency medication used to treat severe hypoglycemia.\n It needs to be administered by another person as Oscar will be unconscious.\n If he doesn't wake up after 15min, we need to call 911.",
+
+    "juice": "  If the symptoms are not severe, a snack can be given to increase \n the level of blood sugar. This snack needs quick sugar like 15g glucose tablets,\n 1 TBS honey, 1/2 glass of juice or 15g candy",
+
+    "glucometer": "This is a glucometer. It is used to measure the blood sugar.\n The normal value of blood glucose is 4-7 before eating and\n 5-10 when measured 2h after a meal. Below 2.8 is very low. "
+  }
+}
