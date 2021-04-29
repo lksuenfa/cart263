@@ -18,14 +18,15 @@ class Play extends Phaser.Scene {
 
     this.add.text(100, 500, description, style);
 
+    let startText = `< Click to start >`;
+    this.add.text(300, 550, startText, style);
+
     this.input.on(
-      "pointerup",
+      "pointerdown",
       function (pointer) {
         this.scene.start("kitchen");
       },
       this
     );
   }
-
-  update() {}
 }
