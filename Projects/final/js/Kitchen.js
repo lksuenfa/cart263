@@ -58,7 +58,7 @@ class Kitchen extends Phaser.Scene {
     };
 
     //set a random number for BG value
-    this.bloodSugarValue = this.randomIntFromInterval(2, 3);
+    this.bloodSugarValue = this.random(2, 3);
 
     //display text
     this.symptoms = this.add.text(100, 500, ``, this.textStyle);
@@ -214,7 +214,7 @@ class Kitchen extends Phaser.Scene {
     );
   }
   // // Generate a random number and round it up
-  randomIntFromInterval(min, max) {
+  random(min, max) {
     // Generate a random number between intervals
     //Adapted from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
     min = Math.ceil(min);
