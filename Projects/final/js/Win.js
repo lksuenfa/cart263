@@ -1,6 +1,6 @@
-class Lose extends Phaser.Scene {
+class Win extends Phaser.Scene {
   constructor() {
-    super({ key: `lose` });
+    super({ key: `win` });
   }
 
   create() {
@@ -11,7 +11,7 @@ class Lose extends Phaser.Scene {
       color: `#bf0442`,
     };
 
-    let description = `The sweet Oscar has joined \nhis ancestors in heaven.`;
+    let description = `Oscar is feeling so much better`;
 
     this.add.text(100, 100, description, style);
 

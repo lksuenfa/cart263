@@ -12,6 +12,18 @@ class Kitchen extends Phaser.Scene {
   }
 
   create() {
+    this.bloodSugar = {
+      initial: this.random(2, 3),
+      displayed: undefined,
+    };
+
+    this.rate = {
+      decrease: -0.005,
+      increase: 0.01,
+      rapidIncrease: 0.02,
+      zero: 0,
+    };
+
     //add images
     this.kitchen = this.add.image(500, 200, `kitchen`);
     this.healthBar = this.add.image(450, 200, `healthBar`);
@@ -38,8 +50,8 @@ class Kitchen extends Phaser.Scene {
     });
 
     //add audio
-    // this.music = this.sound.add("theme");
-    // this.music.play();
+    this.music = this.sound.add("theme");
+    this.music.play();
 
     //set a general style for text
     this.textStyle = {
@@ -57,18 +69,22 @@ class Kitchen extends Phaser.Scene {
       backgroundColor: `black`,
     };
 
-    //set a random number for BG value
-    this.bloodSugarValue = this.random(2, 3);
+    //set up first BG reading
+    this.bloodSugar.displayed = this.bloodSugar.initial;
 
     //display text
-    this.symptoms = this.add.text(100, 500, ``, this.textStyle);
-    this.response = this.add.text(100, 550, ``, this.textStyle);
+
+    this.symptoms = this.add.text(100, 500, ``, this.textStyle); //symptoms
+
+    this.response = this.add.text(100, 550, ``, this.textStyle); // response
+    //BG reading
     this.bloodSugarDisplay = this.add.text(
       20,
       20,
-      this.bloodSugarValue,
+      this.bloodSugar.displayed,
       this.textStyle
     );
+
     //set visibility of item
     this.symptoms.setVisible(false);
     this.response.setVisible(false);
@@ -82,29 +98,21 @@ class Kitchen extends Phaser.Scene {
   }
 
   update() {
-    //lose if BG falls below 0.1
-    if (this.bloodSugarValue < 0.1) {
-      this.add.text(100, 100, `Game Over`, this.highlightStyle);
-      this.input.on("pointerdown", () => this.scene.start("lose"));
-    }
-
-    //win if BG > 5
-    else if (this.bloodSugarValue >= BLOODSUGAR.good) {
-      this.add.text(100, 100, `You Win`, this.highlightStyle);
-      this.input.on("pointerdown", () => this.scene.start("victory"));
-    }
-
+    //baseline BG decreasing
+    this.metabolism(this.rate.decrease, this.rate.zero);
+    this.updateBloodSugarDisplay();
     this.updateHealth();
     this.updateBloodSugarDisplay();
     this.checkOverlap();
     this.interact();
+    this.end();
   }
 
   //Update health Bar
   //Adapted from Pippin Barr
   updateHealth() {
     //ratio of blood sugar reading as a fraction of the max blood sugar for display
-    this.ratio = this.bloodSugarValue / BLOODSUGAR.max;
+    this.ratio = this.bloodSugar.displayed / BLOODSUGAR.max;
     //display this ratio as proportional to max height
     this.healthBar.setScale(
       this.healthBar.maxWidth * this.ratio,
@@ -114,78 +122,78 @@ class Kitchen extends Phaser.Scene {
 
   // Update the Blood sugar display
   updateBloodSugarDisplay() {
-    this.bloodSugarDisplay.text = Math.round(this.bloodSugarValue * 10) / 10;
+    this.bloodSugarDisplay.text =
+      Math.round(this.bloodSugar.displayed * 10) / 10;
   }
 
   //interactions of juice, blood sugar reading and glucagon with oscar
   interact() {
-    //if BG < or = 2.8, severe hypoglycemia
-    if (this.bloodSugarValue < BLOODSUGAR.severeLow) {
-      //baseline BG decrease rate
-      this.metabolism(-0.005, 0);
-
-      //if overlap with glucometer
+    //display  initial status of symptoms
+    if (this.bloodSugar.displayed < this.bloodSugar.initial) {
       if (this.checkOscar) {
-        this.symptoms.text = "Help! Oscar has fainted!!";
+        this.symptoms.setVisible(this.checkOscar);
+        //start with severe hypoglycemia <= 2.8
+        if (this.bloodSugar.initial <= BLOODSUGAR.severeLow) {
+          this.symptoms.text = "Help! Oscar has fainted!!";
+        }
+        //start with moderate hypoglycemia <= 3.5
+        else if (this.bloodSugar.initial <= BLOODSUGAR.low) {
+          this.symptoms.text = "Oscar is feeling dizzy and drowsy";
+        }
+        //start with light hypoglycemia <= 3.5
+        else if (this.bloodSugar.initial <= BLOODSUGAR.hypoglycemia) {
+          this.symptoms.text = "Oscar is feeling hungry and nauseous";
+        }
       }
+    }
+    //if BG improving from initial
+    else if (this.bloodSugar.displayed > this.bloodSugar.initial) {
+      if (this.checkOscar) {
+        this.symptoms.setVisible(this.checkOscar);
+        this.symptoms.text = "Oscar is feeling better!!";
+      }
+    }
 
-      //if overlap with juice
+    //treat hypoglycemia
+    //if BG < or = 2.8, severe hypoglycemia
+    if (this.bloodSugar.displayed < BLOODSUGAR.severeLow) {
+      //if juice given
       if (this.giveJuice) {
         this.response.text =
           "This is an emergency! Oscar is unconscious, he can't drink juice!";
         this.response.setVisible(this.giveJuice);
       }
 
-      //if overlap with glucagon
+      //if glucagon given
       if (this.giveGlucagon) {
-        this.metabolism(0, 0.03);
+        this.metabolism(this.rate.zero, this.rate.increase);
         this.updateBloodSugarDisplay();
-        this.symptoms.text = "Oscar will feel better soon!!";
-        this.glucagon.setVisible(false);
       }
-    }
-    //if BG > 2.8 but not good enough to win
-    else if (
-      this.bloodSugarValue >= BLOODSUGAR.severeLow &&
-      this.bloodSugarValue < BLOODSUGAR.good
-    ) {
-      this.metabolism(-0.005, 0.001);
-      //if check Oscar with glucometer
-      if (this.checkOscar) {
-        //if severely low blood sugar
-        if (this.bloodSugarValue <= BLOODSUGAR.low) {
-          this.symptoms.text = "Oscar is feeling dizzy and drowsy";
-        }
-        //if blood sugar low
-        else if (this.bloodSugarValue <= BLOODSUGAR.hypoglycemia) {
-          this.symptoms.text = "Oscar is feeling hungry and nauseous";
-        }
-        //if blood sugar > 4
-        else this.symptoms.text = "Oscar is feeling a lot better";
+    } else {
+      //if glucagon given
+      if (this.giveGlucagon) {
+        this.response.text =
+          "***** There is no need for glucagon. Give him a snack****";
+        this.response.setVisible(this.giveGlucagon);
       }
 
       //if juice given
       if (this.giveJuice) {
-        this.metabolism(0, 0.01);
+        this.metabolism(this.rate.zero, this.rate.rapidIncrease);
         this.updateBloodSugarDisplay();
 
         this.response.text = "Check Oscar's blood sugar is increasing again";
-        this.response.setVisible(true);
-      }
+        this.response.setVisible(this.giveJuice);
 
-      //if glucagon given
-      if (this.giveGlucagon) {
-        this.response.text =
-          "*****It is not that bad! There is no need for glucagon.****";
-        this.response.setVisible(true);
-        this.symptoms.setVisible(false);
+        //make glucagon disappear after giving juice
+        this.glucagon.setVisible(false);
       }
     }
   }
 
+  //continuous decrease  of blood sugar value
   metabolism(consumption, intake) {
-    //continuous decrease  of blood sugar value
-    this.bloodSugarValue += consumption + intake;
+    this.bloodSugar.displayed += consumption + intake;
   }
 
   //check for overlap
@@ -224,5 +232,20 @@ class Kitchen extends Phaser.Scene {
     //Adapted from https://stackoverflow.com/questions/4959975/generate-random-number-between-two-numbers-in-javascript
     let roundedNum = Math.round(randomNum * 10) / 10;
     return roundedNum;
+  }
+
+  end() {
+    //lose if BG falls below 0.1
+    if (this.bloodSugar.displayed < 0.1) {
+      this.add.text(100, 100, `Game Over`, this.highlightStyle);
+      //on click change scene
+      this.input.on("pointerdown", () => this.scene.start("lose"));
+    }
+    //win if above 5
+    else if (this.bloodSugar.displayed >= BLOODSUGAR.good) {
+      this.add.text(100, 100, `Game Over`, this.highlightStyle);
+      //on click change scene
+      this.input.on("pointerdown", () => this.scene.start("win"));
+    }
   }
 }
