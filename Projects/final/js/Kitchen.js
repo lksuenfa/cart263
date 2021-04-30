@@ -37,7 +37,6 @@ class Kitchen extends Phaser.Scene {
       gameObject.y = dragY;
     });
 
-    //to uncomment
     //add audio
     // this.music = this.sound.add("theme");
     // this.music.play();
@@ -47,6 +46,7 @@ class Kitchen extends Phaser.Scene {
       fontFamily: `Kiwi Maru`,
       fontSize: 20,
       color: `#bf0442`,
+      backgroundColor: `#fff0b8`,
     };
 
     //set a highlight style for text
@@ -82,9 +82,6 @@ class Kitchen extends Phaser.Scene {
   }
 
   update() {
-    //continuous decrease  of blood sugar value
-    this.bloodSugarValue -= 0.005;
-
     //lose if BG falls below 0.1
     if (this.bloodSugarValue < 0.1) {
       this.add.text(100, 100, `Game Over`, this.highlightStyle);
@@ -123,7 +120,10 @@ class Kitchen extends Phaser.Scene {
   //interactions of juice, blood sugar reading and glucagon with oscar
   interact() {
     //if BG < or = 2.8, severe hypoglycemia
-    if (this.bloodSugarValue <= BLOODSUGAR.severeLow) {
+    if (this.bloodSugarValue < BLOODSUGAR.severeLow) {
+      //baseline BG decrease rate
+      this.metabolism(-0.005, 0);
+
       //if overlap with glucometer
       if (this.checkOscar) {
         this.symptoms.text = "Help! Oscar has fainted!!";
@@ -138,16 +138,18 @@ class Kitchen extends Phaser.Scene {
 
       //if overlap with glucagon
       if (this.giveGlucagon) {
-        this.bloodSugarValue += 0.01; //increase BG
+        this.metabolism(0, 0.03);
         this.updateBloodSugarDisplay();
         this.symptoms.text = "Oscar will feel better soon!!";
+        this.glucagon.setVisible(false);
       }
-
-      //if BG > 2.8 but not good enough to win
-    } else if (
-      this.bloodSugarValue > BLOODSUGAR.severeLow &&
+    }
+    //if BG > 2.8 but not good enough to win
+    else if (
+      this.bloodSugarValue >= BLOODSUGAR.severeLow &&
       this.bloodSugarValue < BLOODSUGAR.good
     ) {
+      this.metabolism(-0.005, 0.001);
       //if check Oscar with glucometer
       if (this.checkOscar) {
         //if severely low blood sugar
@@ -164,21 +166,26 @@ class Kitchen extends Phaser.Scene {
 
       //if juice given
       if (this.giveJuice) {
-        this.bloodSugarValue += 0.01; //increase BG
+        this.metabolism(0, 0.01);
         this.updateBloodSugarDisplay();
 
         this.response.text = "Check Oscar's blood sugar is increasing again";
-        this.response.setVisible(this.giveJuice);
+        this.response.setVisible(true);
       }
 
       //if glucagon given
       if (this.giveGlucagon) {
         this.response.text =
-          "It is not that bad! There is no need for glucagon.";
-        this.response.setVisible(this.giveGlucagon);
-        this.symptoms.text = "Oscar will feel better soon!!";
+          "*****It is not that bad! There is no need for glucagon.****";
+        this.response.setVisible(true);
+        this.symptoms.setVisible(false);
       }
     }
+  }
+
+  metabolism(consumption, intake) {
+    //continuous decrease  of blood sugar value
+    this.bloodSugarValue += consumption + intake;
   }
 
   //check for overlap
@@ -219,25 +226,3 @@ class Kitchen extends Phaser.Scene {
     return roundedNum;
   }
 }
-
-// //create drop zone
-// this.oscar.input.dropZone = true;
-
-// when dropped
-// this.input.on("drop", function (pointer, gameObject, dropZone) {
-//   if (this.giveJuice || this.giveGlucagon) {
-//     this.bloodSugarValue += 3;
-//
-//     gameObject.x = gameObject.input.dragStartX;
-//     gameObject.y = gameObject.input.dragStartY;
-//   }
-//   gameObject.input.enabled = false;
-// });
-//
-// if dragged and dropped away from Oscar, come back to initial position
-// this.input.on("dragend", function (pointer, gameObject, dropped) {
-//   if (!dropped) {
-//     gameObject.x = gameObject.input.dragStartX;
-//     gameObject.y = gameObject.input.dragStartY;
-//   }
-// });
